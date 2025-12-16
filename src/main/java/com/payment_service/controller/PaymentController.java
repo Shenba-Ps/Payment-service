@@ -3,6 +3,8 @@ package com.payment_service.controller;
 import com.payment_service.dto.PaymentRequest;
 import com.payment_service.dto.PaymentResponse;
 import com.payment_service.service.StripeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
+Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
     private StripeService stripeService;
 
     @PostMapping("/checkout")
     public ResponseEntity<PaymentResponse> checkout(@RequestBody PaymentRequest request) {
+        logger.info("checkout triggering");
         return ResponseEntity.ok(stripeService.createCheckoutSession(request));
     }
 }
