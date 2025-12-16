@@ -18,7 +18,7 @@ Logger logger = LoggerFactory.getLogger(StripeConfig.class);
         boolean isRender = System.getenv("RENDER") != null;
 
         logger.info("hostname:{}",isRender);
-        logger.info("Stripe Secret Key: " + secretKey);
+
         // Set Stripe API key once during service startup
         Stripe.apiKey = secretKey;
     }
