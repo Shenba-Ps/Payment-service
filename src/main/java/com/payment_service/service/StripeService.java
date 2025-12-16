@@ -5,6 +5,8 @@ import com.payment_service.dto.PaymentResponse;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.Map;
 
 @Service
 public class StripeService {
+
+    Logger logger = LoggerFactory.getLogger(StripeService.class);
     @Value("${app.default.success-url:http://localhost:3000/success}")
     private String defaultSuccessUrl;
 
@@ -69,10 +73,13 @@ public class StripeService {
 
             Session session = Session.create(params);
 
+            String paymentIntentId = session.getPaymentIntent();
+            logger.info("paymentIntentId: " + paymentIntentId);
             return PaymentResponse.builder()
                     .status("SUCCESS")
                     .sessionId(session.getId())
                     .sessionUrl(session.getUrl())
+                    .paymentId(paymentIntentId)
                     .message("Checkout session created")
                     .build();
 
